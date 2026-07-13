@@ -1,0 +1,37 @@
+# === Secrets & credentials (NEVER commit) ===
+# Contabo API / OAuth2 credentials, any real values
+*.tfvars
+!example.tfvars
+.env
+.env.*
+credentials*.json
+secrets*.yml
+vault-password*
+
+# Kubernetes access material
+kubeconfig
+*.kubeconfig
+admin.conf
+*.pem
+*.key
+*.crt
+!ca.example.crt
+
+# Ansible inventory with real IPs (commit only the .example)
+ansible/inventory/hosts.ini
+!ansible/inventory/hosts.example.ini
+
+# === Terraform ===
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+
+# === OS / editor ===
+.DS_Store
+*.swp
+.idea/
+.vscode/
