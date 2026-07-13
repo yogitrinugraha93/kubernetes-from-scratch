@@ -98,4 +98,4 @@ This repository is part of my ongoing effort to deepen that knowledge by buildin
 
 I'm always happy to connect with people working on Kubernetes, cloud infrastructure, or platform engineering.
 
-Contact: [your-email] · [LinkedIn] · [Upwork]
+Contact: yogitrinugraha93@gmail.com · [LinkedIn](https://www.linkedin.com/in/yogi-tri-nugraha-eddy-soetopo-222a44116)
