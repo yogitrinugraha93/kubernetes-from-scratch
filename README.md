@@ -86,7 +86,7 @@ templates.
 
 ## Where this goes next
 
-Once the base cluster is stable, I'd like to extend it into something closer to a real production environment: HA control planes, external etcd, GitOps with ArgoCD, observability, backups, and eventually cluster autoscaling.
+Once the base cluster is stable, I'd like to extend it into something closer to a real production environment: HA control planes, external etcd, a monitoring stack (Prometheus + Grafana), a later migration from Calico to Cilium, GitOps with ArgoCD, backups, and eventually cluster autoscaling.
 
 There's no fixed timeline, and I'll keep adding pieces as I learn and validate them.
 
