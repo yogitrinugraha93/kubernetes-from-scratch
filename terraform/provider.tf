@@ -1,28 +1,13 @@
-# Contabo API credentials (OAuth2). Values come from a git-ignored terraform.tfvars
-# or environment variables. Never hardcode secrets here.
-variable "contabo_oauth2_client_id" {
+# Hetzner Cloud API token — one token, versus Contabo's four OAuth2 fields.
+# TODO: Securely load this value from an environment variable or secrets vault. Do not hardcode.
+#   export HCLOUD_TOKEN=...        (the provider reads this directly), or
+#   export TF_VAR_hcloud_token=...
+variable "hcloud_token" {
   type      = string
   sensitive = true
+  default   = null # null lets the provider fall back to HCLOUD_TOKEN
 }
 
-variable "contabo_oauth2_client_secret" {
-  type      = string
-  sensitive = true
-}
-
-variable "contabo_oauth2_user" {
-  type      = string
-  sensitive = true
-}
-
-variable "contabo_oauth2_pass" {
-  type      = string
-  sensitive = true
-}
-
-provider "contabo" {
-  oauth2_client_id     = var.contabo_oauth2_client_id
-  oauth2_client_secret = var.contabo_oauth2_client_secret
-  oauth2_user          = var.contabo_oauth2_user
-  oauth2_pass          = var.contabo_oauth2_pass
+provider "hcloud" {
+  token = var.hcloud_token
 }

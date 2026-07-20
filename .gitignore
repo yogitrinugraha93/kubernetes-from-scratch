@@ -1,5 +1,5 @@
 # === Secrets & credentials (NEVER commit) ===
-# Contabo API / OAuth2 credentials, any real values
+# Hetzner API token, app secrets, any real values
 *.tfvars
 !example.tfvars
 .env

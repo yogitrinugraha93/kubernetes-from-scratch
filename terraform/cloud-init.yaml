@@ -1,0 +1,10 @@
+#cloud-config
+# Minimal first-boot setup: just enough for Ansible to take over.
+# Deliberately does NOT configure the app or the runtime — that is Ansible's job,
+# so the real setup lives in one place instead of split across two layers.
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - python3   # required by Ansible modules
