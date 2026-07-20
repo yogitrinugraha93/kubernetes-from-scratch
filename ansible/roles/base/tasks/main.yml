@@ -1,0 +1,83 @@
+---
+# Host hygiene shared by both tracks: a sudo user, security updates, a firewall,
+# and hardened SSH. Track-specific roles (docker, k8s) build on top of this.
+
+- name: Set the system timezone
+  community.general.timezone:
+    name: "{{ base_timezone }}"
+
+- name: Install base packages
+  ansible.builtin.apt:
+    name: "{{ base_packages }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Enable unattended security upgrades
+  ansible.builtin.service:
+    name: unattended-upgrades
+    state: started
+    enabled: true
+
+- name: Create the ops user
+  ansible.builtin.user:
+    name: "{{ base_user }}"
+    groups: sudo
+    shell: /bin/bash
+    create_home: true
+
+- name: Grant passwordless sudo to ops
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ base_user }}"
+    content: "{{ base_user }} ALL=(ALL) NOPASSWD:ALL\n"
+    mode: "0440"
+    validate: "visudo -cf %s"
+
+- name: Ensure ops .ssh directory exists
+  ansible.builtin.file:
+    path: "/home/{{ base_user }}/.ssh"
+    state: directory
+    owner: "{{ base_user }}"
+    group: "{{ base_user }}"
+    mode: "0700"
+
+# Reuse the key Hetzner already injected into root, so no key material lives in the repo.
+- name: Copy root's authorized SSH keys to ops
+  ansible.builtin.copy:
+    src: /root/.ssh/authorized_keys
+    dest: "/home/{{ base_user }}/.ssh/authorized_keys"
+    remote_src: true
+    owner: "{{ base_user }}"
+    group: "{{ base_user }}"
+    mode: "0600"
+
+# A drop-in wins over the defaults in sshd_config on Ubuntu 24.04.
+# Existing SSH sessions stay alive, so this is safe to apply mid-run.
+- name: Harden SSH (no root login, keys only)
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.d/10-hardening.conf
+    content: |
+      PermitRootLogin no
+      PasswordAuthentication no
+    mode: "0644"
+  notify: restart ssh
+
+- name: UFW default deny incoming
+  community.general.ufw:
+    direction: incoming
+    policy: deny
+
+- name: UFW default allow outgoing
+  community.general.ufw:
+    direction: outgoing
+    policy: allow
+
+- name: UFW allow SSH
+  community.general.ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled

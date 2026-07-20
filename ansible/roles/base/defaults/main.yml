@@ -1,0 +1,9 @@
+---
+base_user: ops
+base_timezone: UTC
+base_packages:
+  - curl
+  - ca-certificates
+  - gnupg
+  - ufw
+  - unattended-upgrades
