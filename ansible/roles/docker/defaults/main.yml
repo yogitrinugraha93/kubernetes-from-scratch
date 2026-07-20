@@ -1,0 +1,9 @@
+---
+docker_apt_arch: amd64 # arm64 if you pick a cax (Arm) server type
+docker_users:
+  - "{{ base_user }}"
+
+# Hetzner data volume. Set docker_data_volume_id (from `terraform output`) in
+# group_vars to mount it; leave null to skip (e.g. Kubernetes nodes).
+docker_data_volume_id: null
+docker_data_path: /opt/app-data
